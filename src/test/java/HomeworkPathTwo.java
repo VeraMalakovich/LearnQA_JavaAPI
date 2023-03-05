@@ -32,4 +32,30 @@ public class HomeworkPathTwo {
         String locationHeader = response.getHeader("Location");
         System.out.println(locationHeader);
     }
+
+    @Test
+    public void testEx7LongRedirect() {
+        String url = "https://playground.learnqa.ru/api/long_redirect";
+        int code = 0;
+        while(code!=200){
+
+            Response response = RestAssured
+                        .given()
+                        .redirects()
+                        .follow(false)
+                        .when()
+                        .get(url)
+                        .andReturn();
+
+                response.prettyPrint();
+
+                int statusCode = response.getStatusCode();
+                System.out.println(statusCode);
+                code = statusCode;
+
+                String locationHeader = response.getHeader("Location");
+                System.out.println(locationHeader);
+                url = locationHeader;
+        }
+    }
 }
