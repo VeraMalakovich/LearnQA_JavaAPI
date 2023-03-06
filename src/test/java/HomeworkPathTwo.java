@@ -1,8 +1,12 @@
 import com.fasterxml.jackson.annotation.JsonValue;
+//import com.sun.tools.javac.util.Assert;
+//import com.sun.tools.javac.util.Assert;
 import io.restassured.RestAssured;
+import io.restassured.http.Headers;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
+
 
 import java.util.*;
 
@@ -57,5 +61,56 @@ public class HomeworkPathTwo {
                 System.out.println(locationHeader);
                 url = locationHeader;
         }
+    }
+
+    @Test
+    public void testEx8Token() throws InterruptedException {
+        //отправка запроса
+        Response response = RestAssured
+                .given()
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .andReturn();
+
+        response.prettyPrint();
+
+        //запрос с token ДО того, как задача готова, убеждаемся в правильности поля status
+        String responsetoken = response.body().jsonPath().getString("token");
+
+        int responseSeconds = response.body().jsonPath().getInt("seconds");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("token", responsetoken);
+
+                 response = RestAssured
+                .given()
+                .queryParams(params)
+                .when()
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .andReturn();
+
+        response.prettyPrint();
+
+        String responseStatus = response.body().jsonPath().getString("status");
+        System.out.println(responseStatus.equals("Job is NOT ready"));
+        //???а как можно написать проверку, что текст в статусе ошибочный, эти Assert не работают.
+        //Assert.check(true, "Job is NOT ready");
+        //Assert.check(responseStatus.equals("Job is NOT ready"), "error");
+        Thread.sleep(responseSeconds*1000);
+
+        //запрос c token ПОСЛЕ того, как задача готова, проверка поля status и наличии поля result
+        response = RestAssured
+                .given()
+                .queryParams(params)
+                .when()
+                .get("https://playground.learnqa.ru/ajax/api/longtime_job")
+                .andReturn();
+
+        response.prettyPrint();
+
+        responseStatus = response.body().jsonPath().getString("status");
+        System.out.println(responseStatus.equals("Job is ready"));
+
+        String responseResult = response.body().jsonPath().getString("result");
+        System.out.println(responseResult != null);
     }
 }
