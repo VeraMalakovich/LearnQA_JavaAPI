@@ -115,7 +115,7 @@ public class HomeworkPathTwo {
     }
 
     @Test
-    public void testEx8Password() {
+    public void testEx9Password() {
 
         String[] array = {
         "123456", "123456789", "qwerty", "password", "1234567", "12345678", "iloveyou", "12345", "111111", "123123",
