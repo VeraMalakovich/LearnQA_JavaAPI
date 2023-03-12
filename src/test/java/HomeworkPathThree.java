@@ -29,4 +29,20 @@ public class HomeworkPathThree {
         System.out.println(responseCookies);
         assertEquals("{HomeWork=hw_value}", response.getCookies().toString(), "Unexpected cookie");
     }
+
+    @Test
+    public void testEx12Headers() {
+        Response response = RestAssured
+                .get("https://playground.learnqa.ru/api/homework_header")
+                .andReturn();
+
+        System.out.println("\nHeaders:");
+        Headers responseHeader = response.getHeaders();
+        System.out.println(responseHeader);
+
+        System.out.println("\nSecret header:");
+        String locationHeader = response.getHeader("x-secret-homework-header");
+        System.out.println(locationHeader);
+        assertEquals("Some secret value", response.getHeader("x-secret-homework-header"), "Unexpected header");
+    }
 }
