@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class HelloWorldTest {
     @Test
     public void testRestAssured() {
@@ -274,5 +277,21 @@ public class HelloWorldTest {
                 .andReturn();
 
         responseForCheck.print();
+        }
+
+    @Test
+    public void testJunitAssertTrue() {
+        Response response = RestAssured
+                .get("https://playground.learnqa.ru/api/map2") //map
+                .andReturn();
+        assertTrue(response.statusCode() == 200, "Unexpected status code");
+        }
+
+    @Test
+    public void testJunitAssertEquals() {
+        Response response = RestAssured
+                .get("https://playground.learnqa.ru/api/map2") //map
+                .andReturn();
+        assertEquals(200, response.statusCode(), "Unexpected status code");
         }
     }
