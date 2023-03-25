@@ -87,4 +87,13 @@ public class ApiCoreRequests {
                 .post("https://playground.learnqa.ru/api/user/login")
                 .andReturn();
     }
+
+    @Step("Make DELETE-request with token")
+    public static Response deleteUserRequest(String header, String cookie, String userId) {
+        return given()
+                .header("x-csrf-token", header)
+                .cookie("auth_sid", cookie)
+                .delete("https://playground.learnqa.ru/api/user/" + userId)
+                .andReturn();
+    }
 }
