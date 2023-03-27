@@ -1,6 +1,9 @@
 package tests;
 
 import io.qameta.allure.Epic;
+import io.qameta.allure.Link;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Severity;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.Assertions;
@@ -20,12 +23,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 
-@Epic("Registration")
+@Epic("Регистрация")
 public class UserRegisterTest extends BaseTestCase {
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
     @Test
-    @DisplayName("Create user with invalid email (missing @)")
+    @DisplayName("Регистрация с некорректным email")
+    @Description("Потаемся зарегистрировать пользователя у которого пропущен @ в email")
+    @Severity(SeverityLevel.CRITICAL)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testCreateUserWithIncorrectEmail() {
         String email = "example.test.com";
         Map<String, String> userData = new HashMap<>();
@@ -43,7 +49,10 @@ public class UserRegisterTest extends BaseTestCase {
 
     @ParameterizedTest
     @ValueSource(strings = {"username", "email", "password", "firstName", "lastName"})
-    @DisplayName("Creating user without one of parameters")
+    @DisplayName("Регистрация без одного из обязательных параметров")
+    @Description("Пытаемся зарегистрировать пользователя без одного из полей \"username\", \"email\", \"password\", \"firstName\", \"lastName\"")
+    @Severity(SeverityLevel.BLOCKER)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testCreateUserWithoutOneOfParameters(String condition) {
         Map<String, String> userData = new HashMap<>();
         userData = DataGenerator.getRegistrationData(userData);
@@ -66,7 +75,10 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
-    @DisplayName("Creating user with a shot name of one character")
+    @DisplayName("Регистрация пользователя с коротким именем")
+    @Description("Пытаемся регистрировать пользователя с именем в один символ")
+    @Severity(SeverityLevel.CRITICAL)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testCreateUserWithOneSymbolName(){
         String username = "V";
         Map<String, String> userData = new HashMap<>();
@@ -83,7 +95,10 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
-    @DisplayName("Creating user with a very long name (more than 250 characters)")
+    @DisplayName("Регистрация пользователя с длинным именем")
+    @Description("Пытаемся зарегистрировать пользователя с именем в 260 символов")
+    @Severity(SeverityLevel.CRITICAL)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testCreateUserWithLongName(){
         String username = "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv" +
                 "vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv" +

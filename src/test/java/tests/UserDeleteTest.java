@@ -1,6 +1,6 @@
 package tests;
 
-import io.qameta.allure.Epic;
+import io.qameta.allure.*;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import lib.BaseTestCase;
@@ -15,11 +15,14 @@ import java.util.Map;
 
 import static lib.ApiCoreRequests.*;
 
-@Epic("Deleting a user")
+@Epic("Удаление пользователя")
 public class UserDeleteTest extends BaseTestCase {
 
     @Test
-    @DisplayName("Delete user with ID=2")
+    @DisplayName("Удалить пользователя с ID=2")
+    @Description("Пытаемся удалить пользователя, у которого проставлен флаг запрета на удаление из системы")
+    @Severity(SeverityLevel.CRITICAL)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testDeleteUser() {
         Response responseGetAuth = authRequest("vinkotov@example.com", "1234");
         Response responseDelete = deleteUserRequest(
@@ -30,7 +33,10 @@ public class UserDeleteTest extends BaseTestCase {
     }
 
     @Test
-    @DisplayName("Delete the created user")
+    @DisplayName("Удаление созданного пользователя")
+    @Description("Создали пользователя, удалили его, проверили, что пользователь действиетльно удален")
+    @Severity(SeverityLevel.CRITICAL)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testDeleteCreatedUser() {
         Map<String, String> userData = DataGenerator.getRegistrationData();
         JsonPath responseCreateAuth = generateUserRequest(userData);
@@ -50,7 +56,10 @@ public class UserDeleteTest extends BaseTestCase {
     }
 
     @Test
-    @DisplayName("Delete a user, who was authorized another user")
+    @DisplayName("Удаление пользователя, авторизованным другим пользователем")
+    @Description("Авторизоваться пользователем и попытаться удалить другого пользователя")
+    @Severity(SeverityLevel.CRITICAL)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testDeleteAnotherUser() {
         Map<String, String> userData = DataGenerator.getRegistrationData();
         JsonPath responseCreateAuth = generateUserRequest(userData);

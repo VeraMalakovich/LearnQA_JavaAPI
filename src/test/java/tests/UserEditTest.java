@@ -1,6 +1,6 @@
 package tests;
 
-import io.qameta.allure.Epic;
+import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -16,10 +16,13 @@ import java.util.Map;
 
 import static lib.ApiCoreRequests.*;
 
-@Epic("User editing")
+@Epic("Редактирование пользователя")
 public class UserEditTest extends BaseTestCase {
     @Test
-    @DisplayName("Let`s try to change user data, being unauthorized")
+    @DisplayName("Изменение данных неавторизованным пользователем")
+    @Description("Неавторизованный пользователь не может отредактировать свои данные")
+    @Severity(SeverityLevel.NORMAL)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testEditUserWithoutAuth() {
         String newName = "vera";
         Map<String, String> editData = new HashMap<>();
@@ -34,7 +37,10 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
-    @DisplayName("Let`s try to change user`s data while being authorized by another user")
+    @DisplayName("Редактирование данных другим пользователем")
+    @Description("Авторизоваться и попытаться отредактировать данные другого пользователя")
+    @Severity(SeverityLevel.NORMAL)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testEditUserWithAnotherUser() {
         Map<String, String> userData = DataGenerator.getRegistrationData();
         generateUserRequest(userData);
@@ -59,7 +65,10 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
-    @DisplayName("Let`s try to change user`s email being authorized by the same user (new email without @)")
+    @DisplayName("Попытка изменить email у которого нет @")
+    @Description("Авторизованный пользователь пытается сохранить email без @")
+    @Severity(SeverityLevel.NORMAL)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testEditWithWrongEmail() {
         Map<String, String> userData = DataGenerator.getRegistrationData();
         JsonPath responseCreateAuth = generateUserRequest(userData);
@@ -84,7 +93,10 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
-    @DisplayName("Try to change the firstName of the user, being authorized by the same user (shot value of one character)")
+    @DisplayName("Сохранить имя пользователя с одним символом")
+    @Description("Пытаемся сохранить firstName только с одним символом V")
+    @Severity(SeverityLevel.NORMAL)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testEditFirstNameTooShort() {
         Map<String, String> userData = DataGenerator.getRegistrationData();
         JsonPath responseCreateAuth = generateUserRequest(userData);
@@ -109,6 +121,10 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
+    @DisplayName("Редактирование только что созданного пользователя")
+    @Description("Создаем пользователя, а потом его же и редактируем")
+    @Severity(SeverityLevel.CRITICAL)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testEditJustCreatedTest() {
         //GENERATE USER
         Map<String, String> userData = DataGenerator.getRegistrationData();

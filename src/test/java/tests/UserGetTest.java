@@ -1,6 +1,6 @@
 package tests;
 
-import io.qameta.allure.Epic;
+import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
@@ -11,12 +11,15 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-@Epic("Getting user data")
+@Epic("Получение данных пользователя")
 public class UserGetTest extends BaseTestCase {
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
     @Test
-    @DisplayName("Getting data for unauthorized user")
+    @DisplayName("Получение данных неавторизованным пользователем")
+    @Description("Данные пытается получить неавторизованный пользователь")
+    @Severity(SeverityLevel.BLOCKER)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testGetUserDataNotAuth(){
         Response responseUserData = RestAssured
                 .get("https://playground.learnqa.ru/api/user/2")
@@ -28,7 +31,10 @@ public class UserGetTest extends BaseTestCase {
     }
 
     @Test
-    @DisplayName("Getting another user`s data by an authorized user")
+    @DisplayName("Получение данных другого пользователя")
+    @Description("Авторизованный пользователь пытается получить данные другого пользователя")
+    @Severity(SeverityLevel.BLOCKER)
+    @Link("https://playground.learnqa.ru/api/map")
     public void testGetUserDetailsAuthAsSameUser() {
         Map<String, String> authData = new HashMap<>();
         authData.put("email", "vinkotov@example.com");
